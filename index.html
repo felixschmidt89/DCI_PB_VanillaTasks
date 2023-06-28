@@ -1,0 +1,48 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap"
+      rel="stylesheet" />
+    <script
+      src="https://kit.fontawesome.com/ec0c52dba5.js"
+      crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="script.js"></script>
+    <title>
+      VanillaTasks // A simple Vanilla JavaScript ToDoList WEB application
+    </title>
+  </head>
+  <body>
+    <main class="tasks-application-container">
+      <section class="tasks-add-task-container">
+        <h1>VanillaTasks</h1>
+        <div class="tasks-input-and-add">
+          <input
+            type="text"
+            id="tasks-input-task"
+            placeholder="Enter a task"
+            aria-label="Task input" />
+          <button id="tasks-add-task-btn" aria-label="Add task">
+            <i class="fa fa-fw fa-plus"></i>
+          </button>
+        </div>
+        <div class="tasks-error" role="alert">Please enter a task.</div>
+      </section>
+
+      <section class="tasks-task-list" aria-live="polite">
+        <ul class="tasks-task-list" role="list"></ul>
+      </section>
+      <section class="tasks-settings">
+        <i class="fa-sharp fa-solid fa-dumpster-fire fa-xl"></i>
+      </section>
+    </main>
+  </body>
+</html>
