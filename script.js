@@ -1,5 +1,4 @@
 /** @format */
-"use strict";
 
 class App {
   // Element selectors
@@ -8,6 +7,8 @@ class App {
   taskList = document.querySelector(".tasks-task-list");
   errorMsg = document.querySelector(".tasks-error");
   settings = document.querySelector(".tasks-settings");
+  toolTips = document.querySelectorAll(".tasks-settings-tooltip-text");
+  icons = document.querySelectorAll(".tasks-settings-icon");
 
   // Restore/ initialize task list
   storedTaskList;
@@ -21,6 +22,10 @@ class App {
     // Event listeners
     this.submitTaskBtn.addEventListener("click", this._addTask.bind(this));
     this.settings.addEventListener("click", this._deleteAllTasks.bind(this));
+    this.icons.forEach((icon, index) => {
+      icon.addEventListener("mouseenter", () => this._showToolTips(index));
+      icon.addEventListener("mouseleave", () => this._hideToolTips(index));
+    });
 
     this.enterTaskElmnt.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
@@ -81,6 +86,16 @@ class App {
     }
   }
 
+  _showToolTips(index) {
+    const tooltip = this.toolTips[index];
+    tooltip.style.display = "flex";
+  }
+
+  _hideToolTips(index) {
+    const tooltip = this.toolTips[index];
+    tooltip.style.display = "none";
+  }
+
   _renderTaskItem(task) {
     const html = `<li class="tasks-task" data-id="${task.id}"><input type='checkbox'>${task.name}</li>`;
     this.taskList.insertAdjacentHTML("afterbegin", html);
@@ -98,4 +113,5 @@ class App {
     }
   }
 }
+
 const toDoList = new App();

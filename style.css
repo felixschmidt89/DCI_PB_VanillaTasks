@@ -13,7 +13,7 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: inherit;
+  box-sizing: border-box;
 }
 
 html {
@@ -54,6 +54,11 @@ main {
   color: var(--color-body);
 }
 
+:focus {
+  outline: 0.3rem solid var(--color-success);
+  padding: 0.1 rem;
+}
+
 h1 {
   color: var(--color-dark);
 }
@@ -83,19 +88,19 @@ h1 {
   margin-right: 0.5rem;
 }
 
-#tasks-add-task-btn {
+.tasks-btn {
   background-color: var(--color-main);
   color: var(--color-dark);
   border: none;
-  font-size: 2.5rem;
+  font-size: 2rem;
 }
 
-#tasks-add-task-btn:hover {
+.tasks-btn:hover {
   color: var(--color-signal);
   border-color: var(--color-tbd);
 }
 
-#tasks-add-task-btn:active {
+.tasks-btn:active {
   color: var(--color-success);
 }
 
@@ -142,4 +147,19 @@ h1 {
   z-index: 1;
   background-color: var(--color-main);
   padding: 2.5rem;
+  gap: 1.5rem;
+}
+
+.tasks-settings-tooltip-text {
+  display: none;
+  background-color: var(--color-dark);
+  color: var(--color-body);
+  padding: 0.5rem;
+  border-radius: 5px;
+  font-size: 1.4rem;
+  position: absolute;
+  top: -1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 1;
 }

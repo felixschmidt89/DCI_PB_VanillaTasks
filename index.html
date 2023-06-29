@@ -30,7 +30,10 @@
             id="tasks-input-task"
             placeholder="Enter a task"
             aria-label="Task input" />
-          <button id="tasks-add-task-btn" aria-label="Add task">
+          <button
+            class="tasks-btn"
+            id="tasks-add-task-btn"
+            aria-label="Add task">
             <i class="fa fa-fw fa-plus"></i>
           </button>
         </div>
@@ -41,7 +44,25 @@
         <ul class="tasks-task-list" role="list"></ul>
       </section>
       <section class="tasks-settings">
-        <i class="fa-sharp fa-solid fa-dumpster-fire fa-xl"></i>
+        <button class="tasks-btn">
+          <i class="tasks-settings-icon fa fa-dumpster-fire"></i>
+          <span class="tasks-settings-tooltip-text">Delete task list</span>
+        </button>
+
+        <button class="tasks-btn">
+          <i class="tasks-settings-icon fa fa-lightbulb-o"></i>
+          <span class="tasks-settings-tooltip-text">Switch mode</span>
+        </button>
+
+        <a
+          class="tasks-btn"
+          href="https://github.com/felixschmidt89"
+          target="_blank">
+          <i class="tasks-settings-icon fa fa-copyright"></i>
+        </a>
+        <span class="tasks-settings-tooltip-text"
+          >Felix Schmidt // July 2023</span
+        >
       </section>
     </main>
   </body>
