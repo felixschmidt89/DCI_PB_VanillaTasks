@@ -21,7 +21,10 @@ class App {
 
     // Event listeners
     this.submitTaskBtn.addEventListener("click", this._addTask.bind(this));
-    this.settings.addEventListener("click", this._deleteAllTasks.bind(this));
+    this.settings.addEventListener(
+      "click",
+      this._handleSettingsClick.bind(this)
+    );
     this.icons.forEach((icon, index) => {
       icon.addEventListener("mouseenter", () => this._showToolTips(index));
       icon.addEventListener("mouseleave", () => this._hideToolTips(index));
@@ -76,7 +79,7 @@ class App {
   _deleteAllTasks(e) {
     if (e.target.matches(".fa-dumpster-fire")) {
       let confirmed = confirm(
-        "Do you really want to delete your entire task lists and all related data?"
+        "Do you really want to delete your entire task list and all related data?"
       );
       if (confirmed) {
         localStorage.clear();
@@ -107,9 +110,42 @@ class App {
       this._renderTaskItem(task);
     }
   }
+
   _clearTaskList() {
     while (this.taskList.firstChild) {
       this.taskList.removeChild(this.taskList.firstChild);
+    }
+  }
+
+  _toggleDarkMode() {
+    // Toggle dark mode class on the body element
+    document.body.classList.toggle("dark-mode");
+
+    const isDarkMode = document.body.classList.contains("dark-mode");
+    if (isDarkMode) {
+      document.documentElement.style.setProperty("--color-body", "#0E1116");
+      document.documentElement.style.setProperty("--color-main", "#0E1116");
+      document.documentElement.style.setProperty("--color-dark", "#f8f7ff");
+      document.documentElement.style.setProperty("--color-dark2", "#ffffff");
+      document.documentElement.style.setProperty("--color-error", "#FE5F55");
+      document.documentElement.style.setProperty("--color-signal", "#E3B23C");
+      document.documentElement.style.setProperty("--color-success", "#F9F9F9");
+    } else {
+      document.documentElement.style.setProperty("--color-body", "#f8f7ff");
+      document.documentElement.style.setProperty("--color-main", "#ffffff");
+      document.documentElement.style.setProperty("--color-dark", "#454372");
+      document.documentElement.style.setProperty("--color-dark2", "#00100b");
+      document.documentElement.style.setProperty("--color-error", "#ef946c");
+      document.documentElement.style.setProperty("--color-signal", "#559cad");
+      document.documentElement.style.setProperty("--color-success", "#749c75");
+    }
+  }
+
+  _handleSettingsClick(e) {
+    if (e.target.matches(".fa-dumpster-fire")) {
+      this._deleteAllTasks(e);
+    } else if (e.target.matches(".fa-lightbulb-o")) {
+      this._toggleDarkMode();
     }
   }
 }
