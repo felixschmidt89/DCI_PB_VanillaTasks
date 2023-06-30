@@ -134,6 +134,11 @@ input {
   margin-left: 2rem;
 }
 
+.tasks-delete-icon {
+  float: right;
+  padding-right: 1.5rem;
+}
+
 .tasks-task-completed {
   text-decoration: line-through;
 }

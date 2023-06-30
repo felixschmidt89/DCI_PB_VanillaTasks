@@ -12,6 +12,7 @@ class App {
 
   // Restore/ initialize task list
   storedTaskList;
+  hideCompleted = true; // Flag to track if completed tasks are hidden
 
   constructor() {
     this.storedTaskList;
@@ -20,7 +21,32 @@ class App {
     this._renderTaskList();
 
     // Event listeners
+    this.enterTaskElmnt.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        this._addTask.bind(this)();
+      }
+    });
     this.submitTaskBtn.addEventListener("click", this._addTask.bind(this));
+    this.taskList.addEventListener("change", (e) => {
+      if (e.target.tagName === "INPUT" && e.target.type === "checkbox") {
+        const checkbox = e.target;
+        const liElement = checkbox.closest(".tasks-task");
+        if (liElement) {
+          const taskId = liElement.dataset.id;
+          this._toggleTaskCompletion(taskId);
+        }
+      }
+    });
+
+    this.taskList.addEventListener("click", (e) => {
+      if (e.target.matches(".tasks-delete-icon")) {
+        const liElement = e.target.closest(".tasks-task");
+        const taskId = liElement.dataset.id;
+        this._deleteTask(taskId);
+        console.log(this.storedTaskList);
+      }
+    });
+
     this.settings.addEventListener(
       "click",
       this._handleSettingsClick.bind(this)
@@ -29,17 +55,50 @@ class App {
       icon.addEventListener("mouseenter", () => this._showToolTips(index));
       icon.addEventListener("mouseleave", () => this._hideToolTips(index));
     });
-
-    this.enterTaskElmnt.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        this._addTask.bind(this)();
-      }
-    });
   }
 
   _restoreInitializeTaskList() {
     this.storedTaskList = JSON.parse(localStorage.getItem("taskList")) || {};
   }
+
+  // render
+
+  _showErrorMsg() {
+    this.errorMsg.style.display = "flex";
+  }
+
+  _clearErrorMsg() {
+    this.errorMsg.style.display = "none";
+  }
+  _renderTaskItem(task) {
+    const { id, name, status } = task;
+    const taskClass =
+      status === "open" ? "tasks-task-open" : "tasks-task-completed";
+    const html = `<li class="tasks-task ${taskClass}" data-id="${id}">
+                    <input type='checkbox'> <span class="task-name">${name}</span>
+                    <i class="fa fa-trash tasks-delete-icon"></i>
+                 </li>`;
+    this.taskList.insertAdjacentHTML("afterbegin", html);
+  }
+
+  _renderTaskList() {
+    this._clearTaskList();
+
+    for (const taskId in this.storedTaskList) {
+      const task = this.storedTaskList[taskId];
+      if (!this.hideCompleted || task.status === "open") {
+        this._renderTaskItem(task);
+      }
+    }
+  }
+
+  _clearTaskList() {
+    while (this.taskList.firstChild) {
+      this.taskList.removeChild(this.taskList.firstChild);
+    }
+  }
+
+  // tasks
 
   _addTask() {
     // Get task name and task ID
@@ -49,6 +108,7 @@ class App {
     const task = {
       name: taskName,
       id: taskId,
+      status: "open",
     };
 
     // Show error message if no task name is entered
@@ -64,16 +124,59 @@ class App {
       // Clear input value and insert new task item
       this.enterTaskElmnt.value = "";
       this._renderTaskItem(task);
-      console.log(this.storedTaskList);
     }
   }
 
-  _showErrorMsg() {
-    this.errorMsg.style.display = "flex";
+  _toggleTaskCompletion(taskId) {
+    const liElement = document.querySelector(
+      `.tasks-task[data-id="${taskId}"]`
+    );
+    if (liElement) {
+      const isCompleted = liElement.classList.contains("tasks-task-completed");
+      if (isCompleted) {
+        liElement.classList.remove("tasks-task-completed");
+        if (this.storedTaskList.hasOwnProperty(taskId)) {
+          this.storedTaskList[taskId].status = "open";
+          localStorage.setItem("taskList", JSON.stringify(this.storedTaskList));
+        }
+      } else {
+        liElement.classList.add("tasks-task-completed");
+        if (this.storedTaskList.hasOwnProperty(taskId)) {
+          this.storedTaskList[taskId].status = "completed";
+          localStorage.setItem("taskList", JSON.stringify(this.storedTaskList));
+        }
+      }
+    }
   }
 
-  _clearErrorMsg() {
-    this.errorMsg.style.display = "none";
+  _deleteTask(taskId) {
+    if (this.storedTaskList.hasOwnProperty(taskId)) {
+      this.storedTaskList[taskId].status = "deleted"; // Set the status to "deleted"
+      localStorage.setItem("taskList", JSON.stringify(this.storedTaskList));
+      this._renderTaskList();
+    }
+  }
+
+  // settings
+
+  _showToolTips(index) {
+    const tooltip = this.toolTips[index];
+    tooltip.style.display = "flex";
+  }
+
+  _hideToolTips(index) {
+    const tooltip = this.toolTips[index];
+    tooltip.style.display = "none";
+  }
+
+  _handleSettingsClick(e) {
+    if (e.target.matches(".fa-dumpster-fire")) {
+      this._deleteAllTasks(e);
+    } else if (e.target.matches(".fa-lightbulb-o")) {
+      this._toggleDarkMode();
+    } else if (e.target.matches(".fa-eye")) {
+      this._toggleCompletedTasks();
+    }
   }
 
   _deleteAllTasks(e) {
@@ -89,36 +192,7 @@ class App {
     }
   }
 
-  _showToolTips(index) {
-    const tooltip = this.toolTips[index];
-    tooltip.style.display = "flex";
-  }
-
-  _hideToolTips(index) {
-    const tooltip = this.toolTips[index];
-    tooltip.style.display = "none";
-  }
-
-  _renderTaskItem(task) {
-    const html = `<li class="tasks-task" data-id="${task.id}"><input type='checkbox'>${task.name}</li>`;
-    this.taskList.insertAdjacentHTML("afterbegin", html);
-  }
-
-  _renderTaskList() {
-    for (const taskId in this.storedTaskList) {
-      const task = this.storedTaskList[taskId];
-      this._renderTaskItem(task);
-    }
-  }
-
-  _clearTaskList() {
-    while (this.taskList.firstChild) {
-      this.taskList.removeChild(this.taskList.firstChild);
-    }
-  }
-
   _toggleDarkMode() {
-    // Toggle dark mode class on the body element
     document.body.classList.toggle("dark-mode");
 
     const isDarkMode = document.body.classList.contains("dark-mode");
@@ -141,12 +215,9 @@ class App {
     }
   }
 
-  _handleSettingsClick(e) {
-    if (e.target.matches(".fa-dumpster-fire")) {
-      this._deleteAllTasks(e);
-    } else if (e.target.matches(".fa-lightbulb-o")) {
-      this._toggleDarkMode();
-    }
+  _toggleCompletedTasks() {
+    this.hideCompleted = !this.hideCompleted;
+    this._renderTaskList();
   }
 }
 
