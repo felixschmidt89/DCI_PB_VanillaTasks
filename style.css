@@ -237,3 +237,13 @@ li {
   transform: translateX(-50%);
   opacity: 1;
 }
+
+.tasks-task.dragging {
+  opacity: 0.5;
+  background-color: var(--color-success);
+  width: 50%;
+}
+
+.tasks-task.drag-over {
+  background-color: var(--color-error);
+}

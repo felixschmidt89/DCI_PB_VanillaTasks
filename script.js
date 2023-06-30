@@ -19,6 +19,7 @@ class App {
     this.enterTaskElmnt.focus();
     this._restoreInitializeTaskList();
     this._renderTaskList();
+    this.initializeDragAndDrop();
 
     // Event listeners
     this.enterTaskElmnt.addEventListener("keydown", (e) => {
@@ -76,12 +77,25 @@ class App {
     const { id, name, status } = task;
     const taskClass =
       status === "open" ? "tasks-task-open" : "tasks-task-completed";
-    const html = `<li class="tasks-task ${taskClass}" data-id="${id}">
+    const html = `<li class="tasks-task ${taskClass}" data-id="${id}" draggable="true">
                     <input type='checkbox'> <span class="task-name">${name}</span>
                     <i class="fa fa-trash tasks-btns delete-icon"></i>
                     <i class="fa fa-pencil tasks-btns edit-icon"></i>
                  </li>`;
+
     this.taskList.insertAdjacentHTML("afterbegin", html);
+
+    const newTaskElement = this.taskList.querySelector(`[data-id="${id}"]`);
+    newTaskElement.addEventListener(
+      "dragstart",
+      this.handleDragStart.bind(this)
+    );
+    newTaskElement.addEventListener("dragover", this.handleDragOver.bind(this));
+    newTaskElement.addEventListener(
+      "dragleave",
+      this.handleDragLeave.bind(this)
+    );
+    newTaskElement.addEventListener("drop", this.handleDrop.bind(this));
   }
 
   _renderTaskList() {
@@ -134,10 +148,11 @@ class App {
   }
 
   _toggleTaskCompletion(taskId) {
-    const liElement = document.querySelector(
-      `.tasks-task[data-id="${taskId}"]`
+    const checkbox = document.querySelector(
+      `.tasks-task[data-id="${taskId}"] input[type="checkbox"]`
     );
-    if (liElement) {
+    if (checkbox) {
+      const liElement = checkbox.closest(".tasks-task");
       const isCompleted = liElement.classList.contains("tasks-task-completed");
       if (isCompleted) {
         liElement.classList.remove("tasks-task-completed");
@@ -187,6 +202,64 @@ class App {
       // Update the task name in the rendered task item
       taskNameElement.innerText = newTaskName;
     }
+  }
+
+  initializeDragAndDrop() {
+    const tasks = document.querySelectorAll(".tasks-task");
+
+    tasks.forEach((task) => {
+      task.addEventListener("dragstart", this.handleDragStart.bind(this));
+      task.addEventListener("dragover", this.handleDragOver.bind(this));
+      task.addEventListener("dragleave", this.handleDragLeave.bind(this));
+      task.addEventListener("drop", this.handleDrop.bind(this));
+    });
+  }
+
+  handleDragStart(e) {
+    e.dataTransfer.setData("text/plain", e.target.dataset.id);
+    e.target.classList.add("dragging");
+  }
+
+  handleDragOver(e) {
+    e.preventDefault();
+    e.target.classList.add("drag-over");
+  }
+
+  handleDragLeave(e) {
+    e.target.classList.remove("drag-over");
+  }
+
+  handleDrop(e) {
+    e.preventDefault();
+    const taskId = e.dataTransfer.getData("text/plain");
+    const sourceElement = document.querySelector(`[data-id="${taskId}"]`);
+    const targetElement = e.target;
+
+    if (sourceElement && targetElement && sourceElement !== targetElement) {
+      const taskList = Array.from(this.taskList.children);
+      const sourceIndex = taskList.indexOf(sourceElement);
+      const targetIndex = taskList.indexOf(targetElement);
+
+      if (sourceIndex !== -1 && targetIndex !== -1) {
+        this.moveTask(sourceIndex, targetIndex);
+      }
+    }
+
+    e.target.classList.remove("drag-over");
+    this.taskList.querySelectorAll(".tasks-task").forEach((task) => {
+      task.classList.remove("dragging");
+    });
+  }
+
+  moveTask(sourceIndex, targetIndex) {
+    const taskList = Array.from(this.taskList.children);
+    const [removedTask] = taskList.splice(sourceIndex, 1);
+    taskList.splice(targetIndex, 0, removedTask);
+
+    this._clearTaskList();
+    taskList.forEach((task) => {
+      this.taskList.appendChild(task);
+    });
   }
 
   // settings
