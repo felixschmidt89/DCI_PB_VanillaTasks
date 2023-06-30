@@ -37,13 +37,15 @@ class App {
         }
       }
     });
-
     this.taskList.addEventListener("click", (e) => {
-      if (e.target.matches(".tasks-delete-icon")) {
+      if (e.target.matches(".fa-trash")) {
         const liElement = e.target.closest(".tasks-task");
         const taskId = liElement.dataset.id;
         this._deleteTask(taskId);
-        console.log(this.storedTaskList);
+      } else if (e.target.matches(".fa-pencil")) {
+        const liElement = e.target.closest(".tasks-task");
+        const taskId = liElement.dataset.id;
+        this._changeTaskName(taskId);
       }
     });
 
@@ -76,7 +78,8 @@ class App {
       status === "open" ? "tasks-task-open" : "tasks-task-completed";
     const html = `<li class="tasks-task ${taskClass}" data-id="${id}">
                     <input type='checkbox'> <span class="task-name">${name}</span>
-                    <i class="fa fa-trash tasks-delete-icon"></i>
+                    <i class="fa fa-trash tasks-btns delete-icon"></i>
+                    <i class="fa fa-pencil tasks-btns edit-icon"></i>
                  </li>`;
     this.taskList.insertAdjacentHTML("afterbegin", html);
   }
@@ -151,9 +154,34 @@ class App {
 
   _deleteTask(taskId) {
     if (this.storedTaskList.hasOwnProperty(taskId)) {
-      this.storedTaskList[taskId].status = "deleted"; // Set the status to "deleted"
+      const confirmed = confirm("Are you sure you want to delete this task?");
+      if (confirmed) {
+        this.storedTaskList[taskId].status = "deleted"; // Set the status to "deleted"
+        localStorage.setItem("taskList", JSON.stringify(this.storedTaskList));
+        this._renderTaskList();
+      }
+    }
+  }
+
+  _changeTaskName(taskId) {
+    const liElement = document.querySelector(
+      `.tasks-task[data-id="${taskId}"]`
+    );
+    const taskNameElement = liElement.querySelector(".task-name");
+
+    // Get the current task name
+    const currentTaskName = taskNameElement.innerText;
+
+    // Prompt the user to enter a new task name
+    const newTaskName = prompt("Enter a new task name:", currentTaskName);
+
+    if (newTaskName !== null && newTaskName.trim() !== "") {
+      // Update the task name in the storedTaskList
+      this.storedTaskList[taskId].name = newTaskName;
       localStorage.setItem("taskList", JSON.stringify(this.storedTaskList));
-      this._renderTaskList();
+
+      // Update the task name in the rendered task item
+      taskNameElement.innerText = newTaskName;
     }
   }
 
