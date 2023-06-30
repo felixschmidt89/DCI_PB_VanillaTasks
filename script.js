@@ -34,7 +34,7 @@ class App {
         const liElement = checkbox.closest(".tasks-task");
         if (liElement) {
           const taskId = liElement.dataset.id;
-          this._toggleTaskCompletion(taskId);
+          this._handleTaskCompletion(taskId);
         }
       }
     });
@@ -168,6 +168,19 @@ class App {
           localStorage.setItem("taskList", JSON.stringify(this.storedTaskList));
         }
       }
+    }
+  }
+
+  _handleTaskCompletion(taskId) {
+    if (this.storedTaskList.hasOwnProperty(taskId)) {
+      const task = this.storedTaskList[taskId];
+      if (task.status === "completed") {
+        task.status = "open";
+      } else {
+        task.status = "completed";
+      }
+      localStorage.setItem("taskList", JSON.stringify(this.storedTaskList));
+      this._renderTaskList();
     }
   }
 
