@@ -75,23 +75,14 @@ class App {
   }
   _renderTaskItem(task) {
     const { id, name, status } = task;
-    const taskClass = status === "open" ? "tasks-task-open" : "tasks-task-completed";
+    const taskClass =
+      status === "open" ? "tasks-task-open" : "tasks-task-completed";
     const html = `<li class="tasks-task ${taskClass}" data-id="${id}" draggable="true">
                     <input type='checkbox' aria-label="Toggle task completion">
                     <span class="task-name">${name}</span>
                     <i class="fa fa-trash tasks-btns delete-icon" aria-label="Delete task"></i>
                     <i class="fa fa-pencil tasks-btns edit-icon" aria-label="Edit task"></i>
                  </li>`;
-  
-    this.taskList.insertAdjacentHTML("afterbegin", html);
-  
-    const newTaskElement = this.taskList.querySelector(`[data-id="${id}"]`);
-    newTaskElement.addEventListener("dragstart", this.handleDragStart.bind(this));
-    newTaskElement.addEventListener("dragover", this.handleDragOver.bind(this));
-    newTaskElement.addEventListener("dragleave", this.handleDragLeave.bind(this));
-    newTaskElement.addEventListener("drop", this.handleDrop.bind(this));
-  }
-  
 
     this.taskList.insertAdjacentHTML("afterbegin", html);
 
