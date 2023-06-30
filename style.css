@@ -44,7 +44,7 @@ main {
   flex-direction: column;
   justify-content: space-between;
   background-color: var(--color-main);
-  height: 85vh;
+  height: 95vh;
   border-radius: 10px;
 }
 /* Media queries for different screen sizes */
