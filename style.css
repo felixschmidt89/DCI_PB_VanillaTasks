@@ -1,5 +1,5 @@
 /** @format */
-
+/* colors */
 :root {
   --color-body: #f8f7ff;
   --color-main: #ffffff;
@@ -9,6 +9,8 @@
   --color-signal: #559cad;
   --color-success: #749c75;
 }
+
+/* general settings */
 
 * {
   margin: 0;
@@ -48,14 +50,14 @@ main {
 }
 /* Media queries for different screen sizes */
 
-/* For small devices (up to 576px width) */
+/* small devices (up to 576px width) */
 @media (max-width: 576px) {
   main {
     width: 100vw;
   }
 }
 
-/* For medium devices (between 577px and 768px width) */
+/* medium devices (between 577px and 768px width) */
 @media (min-width: 577px) and (max-width: 768px) {
   main {
     width: 90vw;
@@ -63,7 +65,7 @@ main {
   }
 }
 
-/* For large devices (between 769px and 992px width) */
+/* large devices (between 769px and 992px width) */
 @media (min-width: 769px) and (max-width: 992px) {
   main {
     width: 70vw;
@@ -71,7 +73,7 @@ main {
   }
 }
 
-/* For extra-large devices (greater than 1200px width) */
+/* extra-large devices (greater than 1200px width) */
 @media (min-width: 1200px) {
   main {
     width: 50vw;
@@ -96,6 +98,8 @@ h1 {
 input {
   background-color: var(--color-body);
 }
+
+/* Add tasks */
 
 .tasks-add-task-container {
   display: flex;
@@ -148,6 +152,8 @@ input {
   margin-bottom: 2rem;
 }
 
+/* task list */
+
 .tasks-task-list {
   width: 100%;
   list-style-type: none;
@@ -182,6 +188,8 @@ input {
 .tasks-task-completed {
   text-decoration: line-through;
 }
+
+/* settings and additional functionality*/
 
 .tasks-settings {
   display: flex;

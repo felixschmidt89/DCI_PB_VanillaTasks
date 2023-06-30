@@ -89,7 +89,10 @@ class App {
 
     for (const taskId in this.storedTaskList) {
       const task = this.storedTaskList[taskId];
-      if (!this.hideCompleted || task.status === "open") {
+      if (
+        task.status !== "deleted" &&
+        (!this.hideCompleted || task.status === "open")
+      ) {
         this._renderTaskItem(task);
       }
     }
@@ -156,9 +159,10 @@ class App {
     if (this.storedTaskList.hasOwnProperty(taskId)) {
       const confirmed = confirm("Are you sure you want to delete this task?");
       if (confirmed) {
-        this.storedTaskList[taskId].status = "deleted"; // Set the status to "deleted"
+        this.storedTaskList[taskId].status = "deleted";
         localStorage.setItem("taskList", JSON.stringify(this.storedTaskList));
         this._renderTaskList();
+        console.log(this.storedTaskList);
       }
     }
   }
@@ -244,7 +248,7 @@ class App {
   }
 
   _toggleCompletedTasks() {
-    this.hideCompleted = !this.hideCompleted;
+    this.hideCompleted = !this.hideCompleted; // toggle value
     this._renderTaskList();
   }
 }
