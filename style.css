@@ -29,8 +29,8 @@ body {
   font-weight: 400;
   line-height: 1.6;
   height: 100vh;
-  overscroll-behavior-y: none;
-  overscroll-behavior-x: none;
+  overflow-y: hidden;
+  overflow-x: hidden;
   background-color: var(--color-body);
   display: flex;
   flex-direction: column;
@@ -46,7 +46,8 @@ main {
   background-color: var(--color-main);
   height: 90vh;
   border-radius: 10px;
-  overflow: auto;
+  height: 100vh;
+  overflow-y: scroll;
 }
 /* Media queries for different screen sizes */
 
