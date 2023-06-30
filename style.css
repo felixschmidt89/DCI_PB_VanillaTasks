@@ -44,7 +44,7 @@ main {
   flex-direction: column;
   justify-content: space-between;
   background-color: var(--color-main);
-  height: 100vh;
+  height: 90vh;
   border-radius: 10px;
   overflow: auto;
 }
