@@ -1,5 +1,6 @@
 /** @format */
-/* colors */
+/* COLORS - be aware that css variables are also set in _toggleDarkMode()*/
+
 :root {
   --color-body: #f8f7ff;
   --color-main: #ffffff;
@@ -10,7 +11,7 @@
   --color-success: #749c75;
 }
 
-/* general settings */
+/* GENERAL */
 
 * {
   margin: 0;
@@ -44,10 +45,10 @@ main {
   flex-direction: column;
   justify-content: space-between;
   background-color: var(--color-main);
+  /* ensure that bottom symbols are visible on most devices */
   height: 95vh;
   border-radius: 10px;
 }
-/* Media queries for different screen sizes */
 
 /* small devices (up to 576px width) */
 @media (max-width: 576px) {
@@ -90,12 +91,10 @@ main {
   padding: 0.1 rem;
 }
 
-h1 {
-  color: var(--color-dark);
-}
+/* ELEMENTS */
 
-input {
-  background-color: var(--color-body);
+#application-header {
+  color: var(--color-dark);
 }
 
 /* Add tasks */
@@ -113,15 +112,19 @@ input {
   border-top: var(--color-signal) solid 2px;
   width: 100%;
   padding: 2rem;
+  background-color: var(--color-main);
 }
 
 #tasks-input-task {
   width: 80%;
   height: 3rem;
   font-size: 2rem;
-  border: 2px solid var(--color-signal);
-  color: var(--color-dark);
+  border: 2px solid var(--color-dark);
+  background-color: var(--color-main);
+  color: var(--color-signal);
   margin-right: 0.5rem;
+  border-radius: 10px;
+  padding: 1rem;
 }
 
 .tasks-btn {
@@ -162,6 +165,7 @@ input {
 
 .tasks-task-list input[type="checkbox"] {
   margin-right: 1rem;
+  margin-left: 0.3rem;
 }
 
 .tasks-task-list li {
@@ -172,13 +176,12 @@ input {
 li {
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .tasks-btns:hover {
   color: var(--color-signal);
-  border-color: var(--color-tbd);
 }
+
 .tasks-task {
   position: relative;
 }
@@ -207,7 +210,7 @@ li {
   font-style: italic;
 }
 
-/* settings and additional functionality*/
+/* SETTINGS AND ADDITIONAL FUNCTIONALITY CONTAINER*/
 
 .tasks-settings {
   display: flex;
@@ -222,6 +225,7 @@ li {
   background-color: var(--color-main);
   padding: 1rem;
   gap: 1.5rem;
+  border-radius: 0px 0px 10px 10px;
 }
 
 .tasks-settings-tooltip-text {
@@ -239,11 +243,11 @@ li {
 }
 
 .tasks-task.dragging {
-  opacity: 0.5;
-  background-color: var(--color-success);
-  width: 50%;
+  opacity: 0.1;
+  background-color: var(--color-signal);
+  width: 25%;
 }
 
 .tasks-task.drag-over {
-  background-color: var(--color-error);
+  background-color: var(--color-success);
 }

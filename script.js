@@ -12,7 +12,7 @@ class App {
 
   // Restore/ initialize task list
   storedTaskList;
-  hideCompleted = true; // Flag to track if completed tasks are hidden
+  hideCompleted = true; // hide completed tasks
 
   constructor() {
     this.storedTaskList;
@@ -317,7 +317,7 @@ class App {
     const isDarkMode = document.body.classList.contains("dark-mode");
     if (isDarkMode) {
       document.documentElement.style.setProperty("--color-body", "#0E1116");
-      document.documentElement.style.setProperty("--color-main", "#0E1116");
+      document.documentElement.style.setProperty("--color-main", "#0a0a0d");
       document.documentElement.style.setProperty("--color-dark", "#f8f7ff");
       document.documentElement.style.setProperty("--color-dark2", "#ffffff");
       document.documentElement.style.setProperty("--color-error", "#FE5F55");
