@@ -1,7 +1,7 @@
 /** @format */
 
 class App {
-  // Element selectors
+  // ELEMENT SELECTORS
   enterTaskElmnt = document.querySelector("#tasks-input-task");
   submitTaskBtn = document.querySelector("#tasks-add-task-btn");
   taskList = document.querySelector(".tasks-task-list");
@@ -10,25 +10,26 @@ class App {
   toolTips = document.querySelectorAll(".tasks-settings-tooltip-text");
   icons = document.querySelectorAll(".tasks-settings-icon");
 
-  // Restore/ initialize task list
-  storedTaskList;
-  hideCompleted = true; // hide completed tasks
+  // Restore/initialize task list
+  hideCompleted = true; // hide completed tasks by default
 
   constructor() {
-    this.storedTaskList;
-    this.enterTaskElmnt.focus();
-    this._restoreInitializeTaskList();
-    this.initializeDragAndDrop();
-    this._renderTaskList();
+    this.storedTaskList; // stores the tasks in the local storage
+    this.enterTaskElmnt.focus(); // Set focus on the task input
+    this._restoreInitializeTaskList(); // Restore or initialize the task list from local storage
+    this.initializeDragAndDrop(); // Enable drag-and-drop functionality
+    this._renderTaskList(); // Render the task list on the page
 
-    // Event listeners
+    // EVENT LISTENERS
     this.enterTaskElmnt.addEventListener("keydown", (e) => {
+      // Add a task when Enter key is pressed
       if (e.key === "Enter") {
         this._addTask.bind(this)();
       }
     });
     this.submitTaskBtn.addEventListener("click", this._addTask.bind(this));
     this.taskList.addEventListener("change", (e) => {
+      // Handle task completion when checkbox is clicked
       if (e.target.tagName === "INPUT" && e.target.type === "checkbox") {
         const checkbox = e.target;
         const liElement = checkbox.closest(".tasks-task");
@@ -39,6 +40,7 @@ class App {
       }
     });
     this.taskList.addEventListener("click", (e) => {
+      // Delete or edit a task when trash or pencil icons are clicked
       if (e.target.matches(".fa-trash")) {
         const liElement = e.target.closest(".tasks-task");
         const taskId = liElement.dataset.id;
@@ -55,16 +57,22 @@ class App {
       this._handleSettingsClick.bind(this)
     );
     this.icons.forEach((icon, index) => {
+      // Show tooltips when hovering over icons in settings
       icon.addEventListener("mouseenter", () => this._showToolTips(index));
       icon.addEventListener("mouseleave", () => this._hideToolTips(index));
     });
   }
 
+  // Restores or initializes the task list from the local storage
   _restoreInitializeTaskList() {
     this.storedTaskList = JSON.parse(localStorage.getItem("taskList")) || {};
   }
 
-  // render
+  // RENDER
+  // Show or hide the error message when no task name is entered
+  _showErrorMsg() {
+    this.errorMsg.style.display = "flex";
+  }
 
   _showErrorMsg() {
     this.errorMsg.style.display = "flex";
@@ -74,9 +82,14 @@ class App {
     this.errorMsg.style.display = "none";
   }
   _renderTaskItem(task) {
+    // Destructure the task object to get id, name, and status
     const { id, name, status } = task;
+
+    // Determine the CSS class for the task item based on its status
     const taskClass =
       status === "open" ? "tasks-task-open" : "tasks-task-completed";
+
+    // Generate the HTML for the task item
     const html = `<li class="tasks-task ${taskClass}" data-id="${id}" draggable="true">
                     <input type='checkbox' aria-label="Toggle task completion">
                     <span class="task-name">${name}</span>
@@ -84,9 +97,13 @@ class App {
                     <i class="fa fa-pencil tasks-btns edit-icon" aria-label="Edit task"></i>
                  </li>`;
 
+    // Insert the task item HTML at the beginning of the task list
     this.taskList.insertAdjacentHTML("afterbegin", html);
 
+    // Get the newly added task element
     const newTaskElement = this.taskList.querySelector(`[data-id="${id}"]`);
+
+    // Add event listeners for drag and drop functionality
     newTaskElement.addEventListener(
       "dragstart",
       this.handleDragStart.bind(this)
@@ -100,10 +117,14 @@ class App {
   }
 
   _renderTaskList() {
+    // Clear the task list before rendering
     this._clearTaskList();
 
+    // Iterate over the storedTaskList and render each task item
     for (const taskId in this.storedTaskList) {
       const task = this.storedTaskList[taskId];
+
+      // Check if the task should be rendered based on its status and the hideCompleted flag
       if (
         task.status !== "deleted" &&
         (!this.hideCompleted || task.status === "open")
@@ -114,12 +135,13 @@ class App {
   }
 
   _clearTaskList() {
+    // Remove all child nodes from the task list
     while (this.taskList.firstChild) {
       this.taskList.removeChild(this.taskList.firstChild);
     }
   }
 
-  // tasks
+  // TASKS
 
   _addTask() {
     // Get task name and task ID
@@ -155,13 +177,17 @@ class App {
     if (checkbox) {
       const liElement = checkbox.closest(".tasks-task");
       const isCompleted = liElement.classList.contains("tasks-task-completed");
+
+      // Toggle completion status
       if (isCompleted) {
+        // Task was completed, mark as open
         liElement.classList.remove("tasks-task-completed");
         if (this.storedTaskList.hasOwnProperty(taskId)) {
           this.storedTaskList[taskId].status = "open";
           localStorage.setItem("taskList", JSON.stringify(this.storedTaskList));
         }
       } else {
+        // Task was open, mark as completed
         liElement.classList.add("tasks-task-completed");
         if (this.storedTaskList.hasOwnProperty(taskId)) {
           this.storedTaskList[taskId].status = "completed";
@@ -174,11 +200,17 @@ class App {
   _handleTaskCompletion(taskId) {
     if (this.storedTaskList.hasOwnProperty(taskId)) {
       const task = this.storedTaskList[taskId];
+
+      // Toggle completion status
       if (task.status === "completed") {
+        // Task was completed, mark as open
         task.status = "open";
       } else {
+        // Task was open, mark as completed
         task.status = "completed";
       }
+
+      // Update task list in local storage and re-render
       localStorage.setItem("taskList", JSON.stringify(this.storedTaskList));
       this._renderTaskList();
     }
@@ -188,7 +220,10 @@ class App {
     if (this.storedTaskList.hasOwnProperty(taskId)) {
       const confirmed = confirm("Are you sure you want to delete this task?");
       if (confirmed) {
+        // Mark task as deleted
         this.storedTaskList[taskId].status = "deleted";
+
+        // Update task list in local storage and re-render
         localStorage.setItem("taskList", JSON.stringify(this.storedTaskList));
         this._renderTaskList();
         console.log(this.storedTaskList);
@@ -218,9 +253,12 @@ class App {
     }
   }
 
+  // DRAG AND DROP FUNCTIONALITY
+
   initializeDragAndDrop() {
     const tasks = document.querySelectorAll(".tasks-task");
 
+    // Attach event listeners to each task for drag and drop functionality
     tasks.forEach((task) => {
       task.addEventListener("dragstart", this.handleDragStart.bind(this));
       task.addEventListener("dragover", this.handleDragOver.bind(this));
@@ -230,39 +268,44 @@ class App {
   }
 
   handleDragStart(e) {
+    // Set the data being dragged as the task's ID
     e.dataTransfer.setData("text/plain", e.target.dataset.id);
     e.target.classList.add("dragging");
   }
 
   handleDragOver(e) {
+    // Prevent default behavior and indicate the target as a potential drop target
     e.preventDefault();
     e.target.classList.add("drag-over");
   }
 
   handleDragLeave(e) {
+    // Remove the indication of a potential drop target
     e.target.classList.remove("drag-over");
   }
 
   handleDrop(e) {
+    // Prevent default behavior and retrieve the dragged task's ID
     e.preventDefault();
     const taskId = e.dataTransfer.getData("text/plain");
     const sourceElement = document.querySelector(`[data-id="${taskId}"]`);
     const targetElement = e.target;
 
+    // Check if both source and target elements exist and are different
     if (sourceElement && targetElement && sourceElement !== targetElement) {
       const taskList = Array.from(this.taskList.children);
       const sourceIndex = taskList.indexOf(sourceElement);
       const targetIndex = taskList.indexOf(targetElement);
 
+      // Move the task within the task list
       if (sourceIndex !== -1 && targetIndex !== -1) {
         this.moveTask(sourceIndex, targetIndex);
       }
     }
 
+    // Remove indication of a potential drop target and clear dragging state
     e.target.classList.remove("drag-over");
-    this.taskList.querySelectorAll(".tasks-task").forEach((task) => {
-      task.classList.remove("dragging");
-    });
+    this.clearDraggingState();
   }
 
   moveTask(sourceIndex, targetIndex) {
@@ -270,52 +313,68 @@ class App {
     const [removedTask] = taskList.splice(sourceIndex, 1);
     taskList.splice(targetIndex, 0, removedTask);
 
+    // Clear and re-render the task list with the updated task order
     this._clearTaskList();
     taskList.forEach((task) => {
       this.taskList.appendChild(task);
     });
   }
 
-  // settings
+  clearDraggingState() {
+    // Remove the dragging class from all tasks in the task list
+    this.taskList.querySelectorAll(".tasks-task").forEach((task) => {
+      task.classList.remove("dragging");
+    });
+  }
+
+  /* SETTINGS AND ADDITIONAL FUNCTIONALITY CONTAINER*/
 
   _showToolTips(index) {
+    // Show the tooltip at the specified index
     const tooltip = this.toolTips[index];
     tooltip.style.display = "flex";
   }
 
   _hideToolTips(index) {
+    // Hide the tooltip at the specified index
     const tooltip = this.toolTips[index];
     tooltip.style.display = "none";
   }
 
   _handleSettingsClick(e) {
+    // Handle the click event on the settings icon
     if (e.target.matches(".fa-dumpster-fire")) {
-      this._deleteAllTasks(e);
+      // Delete all tasks and related data if the dumpster fire icon is clicked
+      const confirmed = confirm(
+        "Do you really want to delete your entire task list and all related data?"
+      );
+      if (confirmed) {
+        this._deleteAllTasks();
+      }
     } else if (e.target.matches(".fa-lightbulb-o")) {
+      // Toggle dark mode if the lightbulb icon is clicked
       this._toggleDarkMode();
     } else if (e.target.matches(".fa-eye")) {
+      // Toggle visibility of completed tasks if the eye icon is clicked
       this._toggleCompletedTasks();
     }
   }
 
-  _deleteAllTasks(e) {
-    if (e.target.matches(".fa-dumpster-fire")) {
-      let confirmed = confirm(
-        "Do you really want to delete your entire task list and all related data?"
-      );
-      if (confirmed) {
-        localStorage.clear();
-        this.storedTaskList = {};
-        this._clearTaskList();
-      }
-    }
+  _deleteAllTasks() {
+    // Delete all tasks and clear local storage
+    localStorage.clear();
+    this.storedTaskList = {};
+    this._clearTaskList();
   }
 
   _toggleDarkMode() {
+    // Toggle dark mode by adding or removing the "dark-mode" class from the body
     document.body.classList.toggle("dark-mode");
 
+    // Update CSS variables based on the dark mode state
     const isDarkMode = document.body.classList.contains("dark-mode");
     if (isDarkMode) {
+      // Set CSS variables for dark mode
       document.documentElement.style.setProperty("--color-body", "#0E1116");
       document.documentElement.style.setProperty("--color-main", "#0a0a0d");
       document.documentElement.style.setProperty("--color-dark", "#f8f7ff");
@@ -324,6 +383,7 @@ class App {
       document.documentElement.style.setProperty("--color-signal", "#E3B23C");
       document.documentElement.style.setProperty("--color-success", "#F9F9F9");
     } else {
+      // Set CSS variables for light mode
       document.documentElement.style.setProperty("--color-body", "#f8f7ff");
       document.documentElement.style.setProperty("--color-main", "#ffffff");
       document.documentElement.style.setProperty("--color-dark", "#454372");
@@ -335,7 +395,8 @@ class App {
   }
 
   _toggleCompletedTasks() {
-    this.hideCompleted = !this.hideCompleted; // toggle value
+    // Toggle the visibility of completed tasks by toggling the hideCompleted flag
+    this.hideCompleted = !this.hideCompleted;
     this._renderTaskList();
   }
 }
