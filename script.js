@@ -18,8 +18,8 @@ class App {
     this.storedTaskList;
     this.enterTaskElmnt.focus();
     this._restoreInitializeTaskList();
-    this._renderTaskList();
     this.initializeDragAndDrop();
+    this._renderTaskList();
 
     // Event listeners
     this.enterTaskElmnt.addEventListener("keydown", (e) => {
