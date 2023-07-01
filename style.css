@@ -118,7 +118,7 @@ main {
 #tasks-input-task {
   width: 80%;
   height: 3rem;
-  font-size: 2rem;
+  font-size: 1.6rem;
   border: 2px solid var(--color-dark);
   background-color: var(--color-main);
   color: var(--color-signal);
