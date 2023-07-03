@@ -1,0 +1,20 @@
+{
+  "name": "pb-vanillatasks",
+  "version": "1.0.0",
+  "description": "A simple Vanilla JavaScript ToDoList WEB application",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "core-js": "^3.31.0",
+    "parcel": "^2.9.3",
+    "regenerator-runtime": "^0.13.11"
+  },
+  "devDependencies": {
+    "process": "^0.11.10"
+  }
+}

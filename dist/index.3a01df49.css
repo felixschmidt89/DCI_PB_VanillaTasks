@@ -1,0 +1,235 @@
+:root {
+  --color-body: #f8f7ff;
+  --color-main: #fff;
+  --color-dark: #454372;
+  --color-dark2: #00100b;
+  --color-error: #ef946c;
+  --color-signal: #559cad;
+  --color-success: #749c75;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+
+body {
+  color: var(--color-dark);
+  background-color: var(--color-body);
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  height: 100vh;
+  font-family: Ubuntu, sans-serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 1.6;
+  display: flex;
+  overflow: hidden;
+}
+
+main {
+  background-color: var(--color-main);
+  border-radius: 10px;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 95vh;
+  display: flex;
+}
+
+@media (width <= 576px) {
+  main {
+    width: 100vw;
+  }
+}
+
+@media (width >= 577px) and (width <= 768px) {
+  main {
+    width: 90vw;
+    margin: 3rem;
+  }
+}
+
+@media (width >= 769px) and (width <= 992px) {
+  main {
+    width: 70vw;
+    margin: 3rem;
+  }
+}
+
+@media (width >= 1200px) {
+  main {
+    width: 50vw;
+    margin: 7rem;
+  }
+}
+
+::selection {
+  background-color: var(--color-signal);
+  color: var(--color-body);
+}
+
+:focus {
+  outline: .2rem solid var(--color-success);
+  padding: .1 rem;
+}
+
+#application-header {
+  color: var(--color-dark);
+}
+
+.tasks-add-task-container {
+  text-align: center;
+  flex-direction: column;
+  display: flex;
+}
+
+.tasks-input-and-add {
+  border-top: var(--color-signal) solid 2px;
+  background-color: var(--color-main);
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+}
+
+#tasks-input-task {
+  border: 2px solid var(--color-dark);
+  background-color: var(--color-main);
+  color: var(--color-signal);
+  border-radius: 10px;
+  width: 80%;
+  height: 3rem;
+  margin-right: .5rem;
+  padding: 1rem;
+  font-size: 1.6rem;
+}
+
+.tasks-btn {
+  background-color: var(--color-main);
+  color: var(--color-dark);
+  border: none;
+  font-size: 2rem;
+}
+
+.tasks-btn:hover {
+  color: var(--color-signal);
+  border-color: var(--color-tbd);
+}
+
+.tasks-btn:active {
+  color: var(--color-success);
+}
+
+.tasks-error {
+  background: var(--color-error);
+  color: var(--color-dark2);
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  display: none;
+}
+
+.tasks-task-list {
+  flex: 1;
+  width: 100%;
+  list-style-type: none;
+  overflow: auto;
+}
+
+.tasks-task-list input[type="checkbox"] {
+  margin-left: .3rem;
+  margin-right: 1rem;
+}
+
+.tasks-task-list li {
+  margin-top: .3rem;
+  margin-left: 2rem;
+}
+
+li {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.tasks-btns:hover {
+  color: var(--color-signal);
+}
+
+.tasks-task {
+  position: relative;
+}
+
+.delete-icon, .edit-icon {
+  z-index: 1;
+  background-color: var(--color-main);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.delete-icon {
+  padding: 1rem;
+  right: 0;
+}
+
+.edit-icon {
+  padding: 1rem;
+  right: 2.8rem;
+}
+
+.tasks-task-completed {
+  font-style: italic;
+  text-decoration: line-through;
+}
+
+.tasks-settings {
+  border-top: var(--color-signal) solid 2px;
+  z-index: 1;
+  background-color: var(--color-main);
+  border-radius: 0 0 10px 10px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  position: sticky;
+  bottom: 0;
+}
+
+.tasks-settings-tooltip-text {
+  background-color: var(--color-dark);
+  color: var(--color-body);
+  opacity: 1;
+  border-radius: 5px;
+  padding: .5rem;
+  font-size: 1.4rem;
+  display: none;
+  position: absolute;
+  top: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tasks-task.dragging {
+  opacity: .1;
+  background-color: var(--color-signal);
+  width: 25%;
+}
+
+.tasks-task.drag-over {
+  background-color: var(--color-success);
+}
+
+/*# sourceMappingURL=index.3a01df49.css.map */

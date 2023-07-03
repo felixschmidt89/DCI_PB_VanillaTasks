@@ -1,4 +1,6 @@
 /** @format */
+// Polyfilling
+import "core-js/stable";
 
 class App {
   // ELEMENT SELECTORS
